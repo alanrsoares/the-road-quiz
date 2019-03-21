@@ -1,3 +1,7 @@
+import baseStyled, {
+  ReactNativeStyledInterface
+} from "styled-components/native";
+
 export const colors = {
   primary: "#FFD400",
   secondary: "#3482B9",
@@ -24,3 +28,12 @@ export const fontSizes = {
   small: baseFontSize * 0.8,
   large: baseFontSize * 1.2
 };
+
+export const theme = {
+  colors,
+  radius
+};
+
+export type Theme = typeof theme;
+
+export default baseStyled as ReactNativeStyledInterface<Theme>;

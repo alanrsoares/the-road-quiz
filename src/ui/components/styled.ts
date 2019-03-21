@@ -1,10 +1,21 @@
-import { styled } from "../theme";
+import styled from "@ui/styled";
 
-export const AppContainer = styled.View`
+export const AppContainer = styled.SafeAreaView`
   flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: ${props => props.theme.colors.primary};
+  background: ${props => props.theme.colors.primary};
+`;
+
+export const AppBar = styled.View`
+  height: 40;
+  background: ${props => props.theme.colors.primary};
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+`;
+
+export const AppBody = styled.View`
+  flex: 1;
+  background-color: ${props => props.theme.colors.secondary};
 `;
 
 export const WelcomeText = styled.Text`
@@ -29,3 +40,7 @@ export const Card = styled.View<{ elevation?: number }>(props => ({
     ? `${props.elevation}px ${props.elevation}px`
     : 0
 }));
+
+export const QuestionCard = styled(Card)`
+  margin: 10px;
+`;

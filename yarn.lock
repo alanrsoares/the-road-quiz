@@ -5046,6 +5046,11 @@ react-is@^16.6.0, react-is@^16.8.1, react-is@^16.8.3, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
   integrity sha512-PVadd+WaUDOAciICm/J1waJaSvgq+4rHE/K70j0PFqKhkTBsPv/82UGQJNXAngz1fOQLLxI6z1sEDmJDQhCTAA==
 
+react-native-really-awesome-button@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-really-awesome-button/-/react-native-really-awesome-button-1.4.2.tgz#db25835f4eb3abe8ac04491db6a509777785c8c8"
+  integrity sha512-di2oPh0PnRGBLcCQ25v3OSplG1g9yFCd31ZvMQe6yLaMyq9yUb9o/Ot85Kj9tegHx1bmVda1zEuFHZLvYBBRFA==
+
 react-native@0.59.1:
   version "0.59.1"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.59.1.tgz#3274dcc0f9558799bd41c8092acac2a79bd627ce"
