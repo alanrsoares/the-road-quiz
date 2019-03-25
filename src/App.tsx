@@ -1,63 +1,66 @@
-import React from "react";
-import { Platform, Text, View } from "react-native";
+import React, { useCallback } from "react";
+import { View } from "react-native";
 import { ThemeProvider } from "styled-components";
-import AwesomeButton from "react-native-really-awesome-button";
 
-import {
-  AppBody,
-  WelcomeText,
-  InstructionsText,
-  AppBar,
-  QuestionCard,
-  AppContainer
-} from "@ui/components/styled";
+import { Button, Question, ProgressBar } from "@ui/components";
 
 import { theme } from "@ui/styled";
+import Screen from "@ui/layouts/Screen";
 
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android:
-    "Double tap R on your keyboard to reload,\n" +
-    "Shake or press menu button for dev menu"
-});
+import { useHandlers } from "@domain/hooks";
+import { IQuestionItem } from "@domain/types";
 
-export function MyCompoent(props: Props) {
-  return <Text />;
+import { cache as questions } from "../db.json";
+
+interface Props {
+  questions: IQuestionItem[];
 }
 
-interface Props {}
-
 export function App(props: Props) {
-  return (
-    <AppContainer>
-      <AppBar>
-        <InstructionsText>To get started, edit App.tsx</InstructionsText>
-      </AppBar>
-      <AppBody>
-        <View style={{ padding: 10 }}>
-          <AwesomeButton
-            stretch
-            textSize={20}
-            backgroundColor={theme.colors.positive}
-          >
-            Do something
-          </AwesomeButton>
-        </View>
+  const { state, actions } = useHandlers(props.questions);
 
-        <QuestionCard elevation={5}>
-          <WelcomeText>Welcome to React Native!</WelcomeText>
-          <InstructionsText>To get started, edit App.tsx</InstructionsText>
-          <InstructionsText>{instructions}</InstructionsText>
-        </QuestionCard>
-      </AppBody>
-    </AppContainer>
+  const selectedItem = state.questions[state.index];
+
+  return (
+    <Screen>
+      <View>
+        <ProgressBar
+          questionsCount={state.questionsAmount}
+          correctCount={state.correctCount}
+          incorrectCount={state.incorrectCount}
+        />
+        <Question
+          onSelect={actions.onOptionSelection}
+          index={state.index + 1}
+          selected={state.selectedOption}
+          {...selectedItem.value}
+        />
+      </View>
+      {state.isDone ? (
+        <Button
+          onPress={actions.onResetState}
+          variant={state.isAnswered ? "positive" : "neutral"}
+          disabled={!state.isAnswered}
+        >
+          Play again
+        </Button>
+      ) : (
+        <Button
+          onPress={actions.onNextQuestion}
+          variant={state.isAnswered ? "positive" : "neutral"}
+          disabled={!state.isAnswered}
+        >
+          Next question
+        </Button>
+      )}
+    </Screen>
   );
 }
 
 export default function ThemedApp() {
   return (
     <ThemeProvider theme={theme}>
-      <App />
+      <App questions={questions} />
     </ThemeProvider>
   );
 }

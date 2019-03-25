@@ -7,7 +7,9 @@ module.exports = {
         cwd: "babelrc",
         root: ["./"],
         alias: {
-          "@ui": "./src/ui"
+          "@ui": "./src/ui",
+          "@domain": "./src/domain",
+          "@lib": "./src/lib"
         }
       }
     ]

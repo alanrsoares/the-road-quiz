@@ -12,8 +12,11 @@
     "noEmit": true,
     "strict": true,
     "target": "esnext",
+    "resolveJsonModule": true,
     "paths": {
-      "@ui/*": ["src/ui/*"]
+      "@ui/*": ["src/ui/*"],
+      "@domain/*": ["src/domain/*"],
+      "@lib/*": ["src/lib/*"]
     }
   },
   "exclude": [
