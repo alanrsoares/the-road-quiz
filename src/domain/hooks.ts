@@ -22,6 +22,29 @@ const makeActionHandlers = (
         : state
     );
   },
+  onOptionSelection(selectedOption: string, isCorrect: boolean) {
+    setState(state => {
+      const hasCompleted = state.index === state.questionsAmount - 1;
+      const incorrectCount = !isCorrect
+        ? state.incorrectCount + 1
+        : state.incorrectCount;
+      const correctCount = isCorrect
+        ? state.correctCount + 1
+        : state.correctCount;
+      const hasFailed = incorrectCount > 3;
+
+      return {
+        ...state,
+        selectedOption,
+        answeredCount: state.answeredCount + 1,
+        correctCount,
+        incorrectCount,
+        isDone: hasCompleted || hasFailed,
+        isAnswered: true,
+        status: hasFailed ? "FAILED" : hasCompleted ? "PASSED" : "IN_PROGRESS"
+      };
+    });
+  },
   async onResetState() {
     const history = await Storage.read<History>([], "/history");
 
@@ -44,29 +67,6 @@ const makeActionHandlers = (
         ...INITIAL_STATE,
         questionsAmount: state.questionsAmount,
         questions: shuffle(questions).slice(0, state.questionsAmount)
-      };
-    });
-  },
-  onOptionSelection(selectedOption: string, isCorrect: boolean) {
-    setState(state => {
-      const isDone = state.index === state.questionsAmount - 1;
-      const incorrectCount = !isCorrect
-        ? state.incorrectCount + 1
-        : state.incorrectCount;
-      const correctCount = isCorrect
-        ? state.correctCount + 1
-        : state.correctCount;
-      const isFailed = incorrectCount > 3;
-
-      return {
-        ...state,
-        selectedOption,
-        answeredCount: state.answeredCount + 1,
-        correctCount,
-        incorrectCount,
-        isDone: isDone || isFailed,
-        isAnswered: true,
-        status: isFailed ? "FAILED" : isDone ? "PASSED" : "IN_PROGRESS"
       };
     });
   }

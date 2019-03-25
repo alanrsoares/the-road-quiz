@@ -39,7 +39,7 @@ export function App(props: Props) {
       {state.isDone ? (
         <Button
           onPress={actions.onResetState}
-          variant={state.isAnswered ? "positive" : "neutral"}
+          variant="positive"
           disabled={!state.isAnswered}
         >
           Play again
@@ -47,7 +47,7 @@ export function App(props: Props) {
       ) : (
         <Button
           onPress={actions.onNextQuestion}
-          variant={state.isAnswered ? "positive" : "neutral"}
+          variant="neutral"
           disabled={!state.isAnswered}
         >
           Next question
