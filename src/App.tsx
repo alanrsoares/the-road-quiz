@@ -2,22 +2,32 @@ import React, { useCallback } from "react";
 import { View } from "react-native";
 import { ThemeProvider } from "styled-components";
 
-import { Button, Question, ProgressBar } from "@ui/components";
-
-import { theme } from "@ui/styled";
-import Screen from "@ui/layouts/Screen";
-
+import { shuffle } from "@lib/helpers";
+import { INITIAL_STATE } from "@domain/constants";
 import { useHandlers } from "@domain/hooks";
 import { IQuestionItem } from "@domain/types";
 
-import { cache as questions } from "../db.json";
+import { theme } from "@ui/styled";
+import Screen from "@ui/layouts/Screen";
+import { Button, Question, ProgressBar } from "@ui/components";
+
+import { cache as questions } from "@domain/db.json";
 
 interface Props {
   questions: IQuestionItem[];
 }
 
 export function App(props: Props) {
-  const { state, actions } = useHandlers(props.questions);
+  const { state, actions } = useHandlers({
+    allQuestions: props.questions,
+    initialState: {
+      ...INITIAL_STATE,
+      questions: shuffle(props.questions).slice(
+        0,
+        INITIAL_STATE.questionsAmount
+      )
+    }
+  });
 
   const selectedItem = state.questions[state.index];
 

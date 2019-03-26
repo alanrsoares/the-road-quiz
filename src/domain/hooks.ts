@@ -4,42 +4,41 @@ import Storage from "@lib/Storage";
 import { shuffle } from "@lib/helpers";
 
 import { State, IQuestionItem, History, HistoryEntry } from "@domain/types";
-import { INITIAL_STATE } from "@domain/constants";
 
-const makeActionHandlers = (
-  setState: SetStateFn,
-  questions: IQuestionItem[]
-) => ({
+interface HandlersContext {
+  allQuestions: IQuestionItem[];
+  initialState: State;
+}
+
+const makeActionHandlers = (setState: SetStateFn, ctx: HandlersContext) => ({
   onNextQuestion() {
     setState(state =>
-      state.index < state.questionsAmount - 1
-        ? {
+      state.index >= state.questionsAmount
+        ? state
+        : {
             ...state,
             index: state.index + 1,
             isAnswered: false,
             selectedOption: null
           }
-        : state
     );
   },
   onOptionSelection(selectedOption: string, isCorrect: boolean) {
     setState(state => {
       const hasCompleted = state.index === state.questionsAmount - 1;
-      const incorrectCount = !isCorrect
-        ? state.incorrectCount + 1
-        : state.incorrectCount;
-      const correctCount = isCorrect
-        ? state.correctCount + 1
-        : state.correctCount;
+      const [correctCount, incorrectCount] = isCorrect
+        ? [state.correctCount + 1, state.incorrectCount]
+        : [state.correctCount, state.incorrectCount + 1];
+
       const hasFailed = incorrectCount > 3;
 
       return {
         ...state,
         selectedOption,
-        answeredCount: state.answeredCount + 1,
         correctCount,
         incorrectCount,
         isDone: hasCompleted || hasFailed,
+        answeredCount: state.answeredCount + 1,
         isAnswered: true,
         status: hasFailed ? "FAILED" : hasCompleted ? "PASSED" : "IN_PROGRESS"
       };
@@ -64,9 +63,9 @@ const makeActionHandlers = (
       saveHistory(entry);
 
       return {
-        ...INITIAL_STATE,
+        ...ctx.initialState,
         questionsAmount: state.questionsAmount,
-        questions: shuffle(questions).slice(0, state.questionsAmount)
+        questions: shuffle(ctx.allQuestions).slice(0, state.questionsAmount)
       };
     });
   }
@@ -74,18 +73,13 @@ const makeActionHandlers = (
 
 export type SetStateFn = (value: React.SetStateAction<State>) => void;
 
-export const useHandlers = (questions: IQuestionItem[]) => {
-  const defaultState = {
-    ...INITIAL_STATE,
-    questions: questions.slice(0, INITIAL_STATE.questionsAmount)
-  };
-
-  const [state, setState] = useState<State>(defaultState);
+export const useHandlers = (ctx: HandlersContext) => {
+  const [state, setState] = useState<State>(ctx.initialState);
 
   // State initialisation
   useEffect(() => {
     const initialiseStateFromCache = async () => {
-      const cached = await Storage.read<State>(defaultState);
+      const cached = await Storage.read<State>(ctx.initialState);
       setState(cached);
     };
     initialiseStateFromCache();
@@ -97,14 +91,17 @@ export const useHandlers = (questions: IQuestionItem[]) => {
       await Storage.persist(toBePersisted);
     };
     // prevent persisting default state
-    if (state !== defaultState) {
+    if (state !== ctx.initialState) {
       persist(state);
     }
   });
 
-  const make = useCallback(() => makeActionHandlers(setState, questions), []);
+  const make = useCallback(
+    (context: HandlersContext) => makeActionHandlers(setState, context),
+    [ctx]
+  );
 
-  const actions = make();
+  const actions = make(ctx);
 
   return { state, actions };
 };
