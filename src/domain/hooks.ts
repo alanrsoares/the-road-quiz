@@ -44,23 +44,21 @@ const makeActionHandlers = (setState: SetStateFn, ctx: HandlersContext) => ({
       };
     });
   },
-  async onResetState() {
-    const history = await Storage.read<History>([], "/history");
-
-    const saveHistory = async (entry: HistoryEntry) =>
+  onResetState() {
+    const persistHistoryEntry = async (entry: HistoryEntry) => {
+      const history = await Storage.read<History>([], "/history");
       await Storage.persist<History>(
-        [...history.slice(0, 4), entry],
+        history.slice(0, 4).concat(entry),
         "/history"
       );
+    };
 
     setState(state => {
-      const entry: HistoryEntry = {
+      persistHistoryEntry({
         correct: state.correctCount,
         incorrect: state.incorrectCount,
         total: state.questionsAmount
-      };
-
-      saveHistory(entry);
+      });
 
       return {
         ...ctx.initialState,

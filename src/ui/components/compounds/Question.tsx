@@ -1,17 +1,13 @@
 import React, { useCallback } from "react";
-import { Text, FlatList } from "react-native";
+import { Text, FlatList, View } from "react-native";
 
 import { IQuestion } from "@domain/types";
 import styled, { colors } from "@ui/styled";
 import { Card } from "@ui/components/core";
 
-const QuestionWrapper = styled.View`
-  flex-direction: row;
+const QuestionContainer = styled.View`
   background-color: ${props => props.theme.colors.primary};
   padding: 10px;
-  border-radius: ${props => props.theme.radius.default};
-  margin-top: 5px;
-  margin-bottom: 5px;
 `;
 
 const QuestionText = styled.Text`
@@ -49,9 +45,10 @@ const getOptionDisplay = (props: OptionProps) =>
 
 export const Option = styled.TouchableOpacity<OptionProps>`
   display: ${getOptionDisplay};
+  flex-direction: row;
   padding: 10px;
   margin: 5px 0;
-  justify-content: center;
+  align-items: center;
   border-radius: ${props => props.theme.radius.default};
   background-color: ${props =>
     props.isAnswered && props.isSelected
@@ -69,9 +66,38 @@ export const OptionText = styled.Text<OptionProps>`
       : props.theme.colors.black};
 `;
 
+export const Padding = styled.View`
+  padding: 5px 10px;
+`;
+
 export const Hint = styled.View`
-  color: #666;
-  padding: 4px;
+  margin: 10px 0;
+`;
+
+export const Pill = styled.View<OptionProps>`
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  border: solid 2px;
+  border-color: ${props =>
+    props.isAnswered && props.isCorrect
+      ? props.theme.colors.white
+      : props.theme.colors.black};
+  border-radius: 15px;
+  margin-right: 5px;
+  background-color: ${props =>
+    props.isAnswered && props.isCorrect
+      ? props.theme.colors.positive
+      : props.theme.colors.white};
+`;
+
+export const PillText = styled.Text<OptionProps>`
+  font-weight: bold;
+  color: ${props =>
+    props.isAnswered && props.isCorrect
+      ? props.theme.colors.white
+      : props.theme.colors.black};
 `;
 
 interface OptionItem {
@@ -97,20 +123,36 @@ export default function Question(props: Props) {
   );
 
   const renderItem = useCallback(
-    (answer: OptionItem) => (
+    (option: OptionItem) => (
       <Option
-        onPress={handleSelection(answer.item.key)}
+        disabled={!!props.selected}
+        onPress={handleSelection(option.item.key)}
         isAnswered={!!props.selected}
-        isCorrect={answer.item.key === props.correctAnswer}
-        isSelected={answer.item.key === props.selected}
+        isCorrect={option.item.key === props.correctAnswer}
+        isSelected={option.item.key === props.selected}
       >
-        <OptionText
+        <Pill
           isAnswered={!!props.selected}
-          isCorrect={answer.item.key === props.correctAnswer}
-          isSelected={answer.item.key === props.selected}
+          isCorrect={option.item.key === props.correctAnswer}
+          isSelected={option.item.key === props.selected}
         >
-          {answer.item.value}
-        </OptionText>
+          <PillText
+            isAnswered={!!props.selected}
+            isCorrect={option.item.key === props.correctAnswer}
+            isSelected={option.item.key === props.selected}
+          >
+            {option.item.key}
+          </PillText>
+        </Pill>
+        <View style={{ flex: 1 }}>
+          <OptionText
+            isAnswered={!!props.selected}
+            isCorrect={option.item.key === props.correctAnswer}
+            isSelected={option.item.key === props.selected}
+          >
+            {option.item.value}
+          </OptionText>
+        </View>
       </Option>
     ),
     [props.selected, props.correctAnswer]
@@ -118,7 +160,7 @@ export default function Question(props: Props) {
 
   return (
     <Card elevation={5}>
-      <QuestionWrapper>
+      <QuestionContainer>
         <QuestionText>
           #{props.index}: {props.question}
         </QuestionText>
@@ -129,28 +171,30 @@ export default function Question(props: Props) {
             source={{ uri: props.image.uri }}
           />
         </ImageWrapper>
-      </QuestionWrapper>
-      <FlatList
-        data={Object.keys(props.answers).map(key => ({
-          key,
-          value: props.answers[key]
-        }))}
-        renderItem={renderItem}
-      />
-      {!!props.selected && (
-        <Hint>
-          {props.selected !== props.correctAnswer && (
-            <Text style={{ color: colors.negative }}>
-              Correct Answer: {props.correctAnswer}
+      </QuestionContainer>
+      <Padding>
+        <FlatList
+          data={Object.keys(props.answers).map(key => ({
+            key,
+            value: props.answers[key]
+          }))}
+          renderItem={renderItem}
+        />
+        {!!props.selected && (
+          <Hint>
+            {props.selected !== props.correctAnswer && (
+              <Text style={{ color: colors.negative }}>
+                Correct Answer: {props.correctAnswer}
+              </Text>
+            )}
+            <Text>
+              {`For more information about this question refer to page ${
+                props.roadCodePage
+              } of the Official New Zealand Road Code.`}
             </Text>
-          )}
-          <Text>
-            {`For more information about this question refer to page ${
-              props.roadCodePage
-            } of the Official New Zealand Road Code.`}
-          </Text>
-        </Hint>
-      )}
+          </Hint>
+        )}
+      </Padding>
     </Card>
   );
 }

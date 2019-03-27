@@ -31,7 +31,8 @@ export const fontSizes = {
 
 export const theme = {
   colors,
-  radius
+  radius,
+  fontSizes
 };
 
 export type Theme = typeof theme;

@@ -29,13 +29,13 @@ export const InstructionsText = styled.Text`
 `;
 
 export const Card = styled.View<{ elevation?: number }>(props => ({
-  padding: "5px 10px",
   margin: "10px",
   borderRadius: props.theme.radius.default,
   backgroundColor: props.theme.colors.white,
-  shadowOpacity: 0.5,
+  shadowOpacity: 0.8,
   shadowColor: props.theme.colors.black,
-  shadowOffset: props.elevation ? `${0} ${props.elevation}px` : 0
+  shadowOffset: props.elevation ? `${0} ${props.elevation}px` : 0,
+  overflow: "hidden"
 }));
 
 export const QuestionCard = styled(Card)``;

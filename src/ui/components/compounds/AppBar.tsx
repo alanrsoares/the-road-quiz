@@ -4,7 +4,7 @@ import { Text } from "react-native";
 import styled from "@ui/styled";
 
 export const Container = styled.View`
-  height: 40;
+  height: 44px;
   background: ${props => props.theme.colors.primary};
   padding: 10px;
   flex-direction: row;
@@ -13,6 +13,7 @@ export const Container = styled.View`
 
 export const Title = styled.Text`
   font-weight: bold;
+  font-size: ${props => props.theme.fontSizes.large};
 `;
 
 export const Left = styled.View``;
