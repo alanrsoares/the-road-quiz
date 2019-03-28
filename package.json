@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.2.2",
-    "appcenter": "^1.13.0",
-    "appcenter-analytics": "^1.13.0",
-    "appcenter-crashes": "^1.13.0",
+    "appcenter": "1.13.0",
+    "appcenter-analytics": "1.13.0",
+    "appcenter-crashes": "1.13.0",
     "ramda": "^0.26.1",
     "react": "16.8.5",
     "react-native": "0.59.2",
