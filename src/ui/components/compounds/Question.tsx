@@ -9,6 +9,8 @@ const QuestionContainer = styled.View`
   flex-direction: row;
   background-color: ${props => props.theme.colors.primary};
   padding: 10px;
+  border-top-left-radius: ${props => props.theme.radius.default};
+  border-top-right-radius: ${props => props.theme.radius.default};
 `;
 
 const QuestionText = styled.Text`

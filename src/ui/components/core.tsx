@@ -32,10 +32,10 @@ export const Card = styled.View<{ elevation?: number }>(props => ({
   margin: "10px",
   borderRadius: props.theme.radius.default,
   backgroundColor: props.theme.colors.white,
-  shadowOpacity: 0.8,
+  shadowOpacity: 0.5,
   shadowColor: props.theme.colors.black,
-  shadowOffset: props.elevation ? `${0} ${props.elevation}px` : 0,
-  overflow: "hidden"
+  shadowRadius: props.theme.radius.default,
+  shadowOffset: !props.elevation ? 0 : `${0} ${props.elevation}px`
 }));
 
 export const QuestionCard = styled(Card)``;
