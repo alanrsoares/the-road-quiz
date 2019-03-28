@@ -6,6 +6,7 @@ import styled, { colors } from "@ui/styled";
 import { Card } from "@ui/components/core";
 
 const QuestionContainer = styled.View`
+  flex-direction: row;
   background-color: ${props => props.theme.colors.primary};
   padding: 10px;
 `;
