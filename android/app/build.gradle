@@ -120,9 +120,9 @@ android {
         release {
             if (project.hasProperty('TRCQ_RELEASE_STORE_FILE')) {
                 storeFile file(TRCQ_RELEASE_STORE_FILE)
-                storePassword APPCENTER_KEYSTORE_PASSWORD
-                keyAlias APPCENTER_KEY_ALIAS
-                keyPassword APPCENTER_KEY_PASSWORD
+                storePassword System.getenv("APPCENTER_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("APPCENTER_KEY_ALIAS")
+                keyPassword System.getenv("APPCENTER_KEY_PASSWORD")
             }
         }
     }
