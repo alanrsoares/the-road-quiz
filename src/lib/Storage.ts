@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-community/async-storage";
+import { AsyncStorage } from "react-native";
 
 const LS_KEY = "@THE_ROAD_QUIZ";
 

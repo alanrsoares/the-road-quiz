@@ -116,10 +116,21 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
+    signingConfigs {
+        release {
+            if (project.hasProperty('TRCQ_RELEASE_STORE_FILE')) {
+                storeFile file(TRCQ_RELEASE_STORE_FILE)
+                storePassword TRCQ_RELEASE_STORE_PASSWORD
+                keyAlias TRCQ_RELEASE_KEY_ALIAS
+                keyPassword TRCQ_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
@@ -141,7 +152,6 @@ dependencies {
     implementation project(':appcenter-crashes')
     implementation project(':appcenter-analytics')
     implementation project(':appcenter')
-    implementation project(':@react-native-community_async-storage')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
