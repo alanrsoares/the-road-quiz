@@ -118,12 +118,10 @@ android {
     }
     signingConfigs {
         release {
-            if (project.hasProperty('TRCQ_RELEASE_STORE_FILE')) {
-                storeFile file(TRCQ_RELEASE_STORE_FILE)
-                storePassword System.getenv("APPCENTER_KEYSTORE_PASSWORD")
-                keyAlias System.getenv("APPCENTER_KEY_ALIAS")
-                keyPassword System.getenv("APPCENTER_KEY_PASSWORD")
-            }
+            storeFile rootProject.file("app/the-roadcode-quiz.keystore")
+            storePassword System.getenv("APPCENTER_KEYSTORE_PASSWORD")
+            keyAlias System.getenv("APPCENTER_KEY_ALIAS")
+            keyPassword System.getenv("APPCENTER_KEY_PASSWORD")
         }
     }
     buildTypes {
