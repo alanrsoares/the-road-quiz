@@ -105,7 +105,6 @@ android {
         applicationId "com.theroadquiz"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
         versionName "1.0"
     }
     splits {
