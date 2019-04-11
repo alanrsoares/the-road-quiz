@@ -172,6 +172,8 @@ declare module "react-native-really-awesome-button" {
      * Button container custom styles
      */
     style?: ViewStyle;
+
+    testID?: string;
   }
 
   export default function AwesomeButton(props: Props): JSX.Element;

@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 
 import { shuffle } from "@lib/helpers";
 import { INITIAL_STATE } from "@domain/constants";
@@ -28,7 +28,7 @@ export default function Root(props: Props) {
   const selectedItem = state.questions[state.index];
 
   return (
-    <Screen>
+    <Screen testID="rootScreen">
       <View>
         <ProgressBar
           questionsCount={state.questionsAmount}
@@ -44,6 +44,7 @@ export default function Root(props: Props) {
       </View>
       {state.isDone ? (
         <Button
+          testID="playAgainBtn"
           onPress={actions.onResetState}
           variant="positive"
           disabled={!state.isAnswered}
@@ -52,9 +53,10 @@ export default function Root(props: Props) {
         </Button>
       ) : (
         <Button
+          testID="nextQuestionBtn"
           onPress={actions.onNextQuestion}
-          variant="neutral"
           disabled={!state.isAnswered}
+          variant="neutral"
         >
           Next question
         </Button>

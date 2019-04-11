@@ -105,6 +105,7 @@ export const PillText = styled.Text<OptionProps>`
 
 interface OptionItem {
   item: { key: string; value: string };
+  index: number;
 }
 
 interface Props extends IQuestion {
@@ -128,6 +129,7 @@ export default function Question(props: Props) {
   const renderItem = useCallback(
     (option: OptionItem) => (
       <Option
+        testID={`option-${option.index}`}
         disabled={!!props.selected}
         onPress={handleSelection(option.item.key)}
         isAnswered={!!props.selected}

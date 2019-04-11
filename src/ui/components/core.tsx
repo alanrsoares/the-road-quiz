@@ -46,12 +46,14 @@ interface ButtonProps {
   variant: "positive" | "negative" | "neutral";
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
+  testID?: string;
 }
 
 export function BaseButton(props: ButtonProps) {
   return (
-    <View style={props.style}>
+    <View style={props.style} testID={props.testID}>
       <AwesomeButton
+        testID={props.testID}
         stretch
         textSize={20}
         onPress={props.onPress}

@@ -3,11 +3,12 @@ import { AppContainer, AppBody, AppBar } from "@ui/components";
 
 interface Props {
   children: ReactNode;
+  testID?: string;
 }
 
 export default function Screen(props: Props) {
   return (
-    <AppContainer>
+    <AppContainer testID={props.testID}>
       <AppBar />
       <AppBody>{props.children}</AppBody>
     </AppContainer>
