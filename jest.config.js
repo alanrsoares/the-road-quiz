@@ -1,4 +1,3 @@
-// jest.config.js
 import { defaults as tsjPreset } from "ts-jest/presets";
 
 module.exports = {
