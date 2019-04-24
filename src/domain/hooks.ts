@@ -5,12 +5,14 @@ import { shuffle } from "@lib/helpers";
 
 import { State, IQuestionItem, History, HistoryEntry } from "@domain/types";
 
-interface HandlersContext {
+export interface HandlersContext {
   allQuestions: IQuestionItem[];
   initialState: State;
 }
 
-const makeActionHandlers = (setState: SetStateFn, ctx: HandlersContext) => ({
+const makeActionHandlers = (setState: SetStateFn) => (
+  ctx: HandlersContext
+) => ({
   onNextQuestion() {
     setState(state =>
       state.index >= state.questionsAmount
@@ -85,21 +87,18 @@ export const useHandlers = (ctx: HandlersContext) => {
 
   // Persistance hook
   useEffect(() => {
-    const persist = async (toBePersisted: State) => {
+    const persist = async (toBePersisted: State) =>
       await Storage.persist(toBePersisted);
-    };
+
     // prevent persisting default state
     if (state !== ctx.initialState) {
       persist(state);
     }
   });
 
-  const make = useCallback(
-    (context: HandlersContext) => makeActionHandlers(setState, context),
-    [ctx]
-  );
+  const makeHandlers = useCallback(makeActionHandlers(setState), [ctx]);
 
-  const actions = make(ctx);
+  const actions = makeHandlers(ctx);
 
   return { state, actions };
 };

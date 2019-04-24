@@ -7,7 +7,7 @@ import { useHandlers } from "@domain/hooks";
 import { IQuestionItem } from "@domain/types";
 
 import Screen from "@ui/layouts/Screen";
-import { Button, Question, ProgressBar } from "@ui/components";
+import { Button, Question, ProgressBar, Card } from "@ui/components";
 
 interface Props {
   questions: IQuestionItem[];
@@ -35,12 +35,22 @@ export default function Root(props: Props) {
           correctCount={state.correctCount}
           incorrectCount={state.incorrectCount}
         />
-        <Question
-          onSelect={actions.onOptionSelection}
-          index={state.index + 1}
-          selected={state.selectedOption}
-          {...selectedItem.value}
-        />
+        {state.isDone ? (
+          <Card>
+            <Text>
+              {state.incorrectCount > 3
+                ? ":( Sorry, try again..."
+                : ":) Yay, congrats!"}
+            </Text>
+          </Card>
+        ) : (
+          <Question
+            onSelect={actions.onOptionSelection}
+            index={state.index + 1}
+            selected={state.selectedOption}
+            {...selectedItem.value}
+          />
+        )}
       </View>
       {state.isDone ? (
         <Button
